@@ -28,30 +28,30 @@ const ExpenseList = (props) => {
             >
               <div
                 key={`${expense.id}-${expense.expenseItems[0]}`}
-                className='expense-list__expense-text'
+                className='expense__expense-text'
               >
                 {expense.expenseItems[0]}
               </div>
               <div
                 key={`${expense.id}-${expense.expenseItems[1]}`}
-                className='expense-list__description-text'
+                className='expense__description-text'
               >
                 {expense.expenseItems[1]}
               </div>
               <div
                 key={`${expense.id}-${expense.expenseItems[2]}`}
-                className='expense-list__date-text'
+                className='expense__date-text'
               >
                 {expense.expenseItems[2]}
               </div>
               <div
                 id={`expense-toggle-${expense.id}`}
-                className='expense-list__toggle-container'
+                className='expense__toggle-container'
                 onClick={toggleSelected}
               >
                 <div
-                  className={`expense-list__dialog-button ${
-                    expense.isSettled ? '' : 'disabled'
+                  className={`expense__dialog-button ${
+                    expense.isSettled ? '' : 'expense__disabled'
                   }`}
                 >
                   {expense.isSettled ? 'Ok' : 'No'}

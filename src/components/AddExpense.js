@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 
 const AddExpense = (props) => {
+  // handle auto-slash insertion for date input
+  const [dateCount, updateDateCount] = useState(0);
+
   // initial state
   const initialFormInputValueState = {
     expense: '',
@@ -92,8 +95,24 @@ const AddExpense = (props) => {
   };
 
   const bindInputValueToForm = (e) => {
+    const dateInput = e.target.closest('input[name="date"]');
+    let dateInputValue;
+
+    if (e.target.value.length === value.date.length + 1) {
+      // check if date input value has hit specific indices and insert slash to format date
+      if (dateInput && (value.date.length === 1 || value.date.length === 4)) {
+        dateInputValue = dateInput.value + '/';
+      }
+    }
+
     // update value with useState and pass in dynamic event target name as key with value
-    setValue({ ...value, [e.currentTarget.name]: e.currentTarget.value });
+    // check if dateInput is present, otherwise pass default e.currentTarget.value
+    setValue({
+      ...value,
+      [e.currentTarget.name]: !dateInputValue
+        ? e.currentTarget.value
+        : dateInputValue,
+    });
   };
 
   return (
@@ -103,10 +122,7 @@ const AddExpense = (props) => {
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          //   onAfterOpen={afterOpenModal}
-          //   onRequestClose={closeModal}
-          //   style={customStyles}
-          contentLabel='Example Modal'
+          contentLabel='Expense Contact Form'
         >
           <button onClick={closeModal}>Close Modal</button>
           <form id='expenseForm' onSubmit={handleAddExpense}>
