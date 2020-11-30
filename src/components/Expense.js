@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const ExpenseList = (props) => {
   // toggle state using falsy bool as arg for useState handler
   const toggleSelected = (e) => {
-    e.persist();
+    //e.persist();
     const currentTargetId = e.currentTarget.id.slice(
       e.currentTarget.id.length - 1
     );
@@ -13,6 +13,15 @@ const ExpenseList = (props) => {
         currentTargetId
       ].isSettled;
       return copiedExpenseList;
+    });
+  };
+
+  const handleRemoveExpense = (e, containerId) => {
+    props.updateExpenseList((expenseList) => {
+      const updatedExpenseList = expenseList.filter(
+        (expense) => expense.id !== parseInt(containerId)
+      );
+      return [...updatedExpenseList];
     });
   };
 
@@ -56,6 +65,19 @@ const ExpenseList = (props) => {
                 >
                   {expense.isSettled ? 'Ok' : 'No'}
                 </div>
+              </div>
+              <div
+                id={`expense_remove-icon-${expense.id}`}
+                onClick={(e) => handleRemoveExpense(e, `${expense.id}`)}
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='18'
+                  height='18'
+                  viewBox='0 0 18 18'
+                >
+                  <path d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z' />
+                </svg>
               </div>
             </div>
           );

@@ -67,8 +67,6 @@ const AddExpense = (props) => {
     );
 
     // update home page state with expense values
-    // props.updateExpenseList([...props.expenseList, formInputValues]);
-    //TODO figure out who homeMain component is passing undefined after state update?
     props.updateExpenseList((expenseList) => {
       const lastExpenseInList = expenseList[expenseList.length - 1];
       return [
@@ -77,6 +75,7 @@ const AddExpense = (props) => {
           id: generateId(lastExpenseInList.id),
           expenseItems: formInputValues,
           isSettled: false,
+          expiration: new Date().getTime() + 1.2e9,
         },
       ];
     });
@@ -96,12 +95,40 @@ const AddExpense = (props) => {
 
   const bindInputValueToForm = (e) => {
     const dateInput = e.target.closest('input[name="date"]');
+    const expenseInput = e.target.closest('input[name="expense"]');
+    const descriptionInput = e.target.closest('input[name="description"]');
     let dateInputValue;
 
-    if (e.target.value.length === value.date.length + 1) {
-      // check if date input value has hit specific indices and insert slash to format date
-      if (dateInput && (value.date.length === 1 || value.date.length === 4)) {
-        dateInputValue = dateInput.value + '/';
+    if (dateInput) {
+      // only passes when a character is added to input
+      if (e.target.value.length === value.date.length + 1) {
+        // prettier-ignore
+        const isNumber = /[0-9]/gi.test(e.target.value[e.target.value.length - 1]);
+        // check if user input is integer, otherwise exclude value from input
+        if (!isNumber) return;
+
+        if (value.date.length === 1 || value.date.length === 4) {
+          // check if date input value has hit specific indices and insert slash to format date
+          dateInputValue = dateInput.value + '/';
+        }
+      }
+    }
+
+    if (expenseInput) {
+      if (e.target.value.length === value.expense.length + 1) {
+        // prettier-ignore
+        const isExpense = /[\.0-9]/gi.test(e.target.value[e.target.value.length - 1]);
+        // check if user input is integer, otherwise exclude value from input
+        if (!isExpense) return;
+      }
+    }
+
+    if (descriptionInput) {
+      if (e.target.value.length === value.expense.length + 1) {
+        // prettier-ignore
+        const isIllegalChar = /[!@\?}#$%^{\]&\[*)(>'<;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
+        // check if user input is integer, otherwise exclude value from input
+        if (isIllegalChar) return;
       }
     }
 
