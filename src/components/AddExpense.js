@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 const AddExpense = (props) => {
   // handle auto-slash insertion for date input
   const [dateCount, updateDateCount] = useState(0);
+  const [errorText, updateErrorText] = useState('');
 
   // initial state
   const initialFormInputValueState = {
@@ -37,7 +38,10 @@ const AddExpense = (props) => {
 
   // reset form value input state with initial state of empty strings
   const clearFormInputValueState = () => {
+    // update form with initial values
     setValue(initialFormInputValueState);
+    // clear all error text
+    updateErrorText('');
   };
 
   // open modal
@@ -47,52 +51,31 @@ const AddExpense = (props) => {
 
   // close modal
   const closeModal = () => {
+    // update form with initial values
+    setValue(initialFormInputValueState);
+    // clear all error text
+    updateErrorText('');
     setIsOpen(false);
   };
 
-  const handleAddExpense = (e) => {
-    e.preventDefault();
-
-    // convert formElement HTML List to array
-    const formElements = [...e.currentTarget.elements];
-
-    // filter out form elements for input elements only
-    const formElementValueList = formElements.filter((formElement) =>
-      formElement.tagName.toLowerCase().includes('input')
-    );
-
-    // map the values from each input element in form
-    const formInputValues = formElementValueList.map((input) =>
-      input.value.trim()
-    );
-
-    // update home page state with expense values
-    props.updateExpenseList((expenseList) => {
-      const lastExpenseInList = expenseList[expenseList.length - 1];
-      return [
-        ...expenseList,
-        {
-          id: generateId(lastExpenseInList.id),
-          expenseItems: formInputValues,
-          isSettled: false,
-          expiration: new Date().getTime() + 1.2e9,
-        },
-      ];
-    });
-
-    // clear form inputs using useState hook
-    clearFormInputValueState();
-
-    // exit from modal after submission
-    closeModal();
-  };
-
+  // handle invalid user input using regex
   const handleInvalidInput = (e) => {
-    const inputRegexValue = INPUT_KEY_REGEX_MAP[e.currentTarget.name];
-    const hasMatch = e.currentTarget.value.match(inputRegexValue);
-    const isValidInput = inputRegexValue.test(e.currentTarget.value);
+    const form = document.getElementById('expenseForm');
+    // prettier-ignore
+    const formInputs = [...form.elements].filter((el) => el.tagName.toLowerCase() === 'input');
+    const validatedInputs = formInputs.filter((input) => {
+      const inputRegexValue = INPUT_KEY_REGEX_MAP[input.name];
+      return inputRegexValue.test(input.value);
+    });
+    return validatedInputs;
   };
 
+  const handleInvalidDate = () => {
+    return updateErrorText('Please enter valid date');
+  };
+
+  // handle two way binding on DOM
+  // adds first line of validation for user input
   const bindInputValueToForm = (e) => {
     const dateInput = e.target.closest('input[name="date"]');
     const expenseInput = e.target.closest('input[name="expense"]');
@@ -142,21 +125,65 @@ const AddExpense = (props) => {
     });
   };
 
+  // handle submission
+  const handleAddExpense = (e) => {
+    e.preventDefault();
+
+    // additional validation onSubmit to ensure correct inputs
+    const validatedInputs = handleInvalidInput(e);
+    if (validatedInputs.length < 3) {
+      handleInvalidDate();
+      return;
+    }
+
+    // convert formElement HTML List to array
+    const formElements = [...e.currentTarget.elements];
+
+    // filter out form elements for input elements only
+    const formElementValueList = formElements.filter((formElement) =>
+      formElement.tagName.toLowerCase().includes('input')
+    );
+
+    // map the values from each input element in form
+    const formInputValues = formElementValueList.map((input) =>
+      input.value.trim()
+    );
+
+    // update home page state with expense values
+    props.updateExpenseList((expenseList) => {
+      const lastExpenseInList = expenseList[expenseList.length - 1];
+      return [
+        ...expenseList,
+        {
+          id: generateId(lastExpenseInList.id),
+          expenseItems: formInputValues,
+          isSettled: false,
+          expiration: new Date().getTime() + 1.2e9,
+        },
+      ];
+    });
+
+    // clear form inputs using useState hook
+    clearFormInputValueState();
+
+    // exit from modal after submission
+    closeModal();
+  };
+
   return (
     <>
       <div className='expense-form__container'>
-        <button onClick={openModal}>Open Modal</button>
+        <button onClick={openModal}>Create New Expense</button>
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           contentLabel='Expense Contact Form'
         >
-          <button onClick={closeModal}>Close Modal</button>
+          <button onClick={closeModal}>Exit Expense</button>
           <form id='expenseForm' onSubmit={handleAddExpense}>
             <label>Expense</label>
             <input
               onChange={bindInputValueToForm}
-              onBlur={handleInvalidInput}
               type='text'
               placeholder='e.g. 24.34'
               name='expense'
@@ -168,7 +195,6 @@ const AddExpense = (props) => {
             <label>Description</label>
             <input
               onChange={bindInputValueToForm}
-              onBlur={handleInvalidInput}
               type='text'
               placeholder='e.g. groceries'
               name='description'
@@ -180,7 +206,6 @@ const AddExpense = (props) => {
             <label>Date</label>
             <input
               onChange={bindInputValueToForm}
-              onBlur={handleInvalidInput}
               type='text'
               placeholder='mm/dd/yyyy'
               name='date'
@@ -189,6 +214,9 @@ const AddExpense = (props) => {
               minLength='10'
               maxLength='10'
             />
+            <span id='dateInputError' className='input__error-text'>
+              {errorText}
+            </span>
             <button type='submit'>Add Expense</button>
           </form>
         </Modal>
