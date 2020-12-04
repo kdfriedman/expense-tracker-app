@@ -1,3 +1,19 @@
+.expense__container {
+    background-color: #fff;
+    margin: 2rem;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding: 2rem;
+    box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, .03);
+    border: 1px solid #edf2f9;
+}
+
+.expense__form-container {
+    margin: 2rem;
+    font-size: 1.8rem;
+}
+
 .expense__toggle-container {
     width: 70px;
     background-color: #c4c4c4;
@@ -39,4 +55,138 @@
 .expense__disabled {
     background-color: #707070;
     left: 1px;
+}
+
+.expense__label {
+    color: #9ba2ad !important;
+    text-transform: uppercase !important;
+    font-size: 1.2rem !important;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.expense__remove-icon {
+    cursor: pointer;
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.expense__remove-icon:hover {
+    background-color: #9563b31f;
+    border-radius: 5px;
+}
+
+.expense__modal-container {
+    position: absolute;
+    border: 1px solid #cccccc;
+    background: white;
+    overflow: auto;
+    border-radius: 10px;
+    outline: none;
+    padding: 20px;
+    left: 10rem;
+    right: 10rem;
+    top: 4rem;
+    display: grid;
+    grid-template-rows: 7rem 1fr;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#expenseForm label {
+    margin-bottom: .65rem;
+}
+
+.expense__create-expense-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.expense__create-expense {
+    align-self: start;
+    margin-top: 1.125rem;
+}
+
+.expense__form-close {
+    cursor: pointer;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: end;
+    align-self: start;
+}
+
+.expense__form-close:hover {
+    background-color: #9563b31f;
+    border-radius: 5px;
+}
+
+form#expenseForm {
+    display: grid;
+    grid-template-rows: 1fr;
+}
+
+@media (max-width: 755px) {
+    .expense__modal-container {
+        max-width: 500px;
+        left: 5rem;
+        right: 5rem;
+    }
+}
+
+@media (max-width: 605px) {
+    .expense__modal-container {
+        max-width: 450px;
+        left: 3rem;
+        right: 3rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .expense__modal-container {
+        max-width: 375px;
+        left: 1.5rem;
+        right: 1.5rem;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .expense__container {
+        background-color: #fff;
+        margin: 2rem;
+        border-radius: 8px;
+        display: grid;
+        row-gap: 2rem;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        padding: 2rem;
+        box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+        border: 1px solid #edf2f9;
+    }
+
+    .expense__expense-container {
+        grid-row: 1 / 1;
+    }
+
+    .expense__description-container {
+        grid-row: 2 / 2;
+    }
+
+    .expense__date-container {
+        grid-row: 3 / 3;
+    }
+
+    .expense__toggle {
+        grid-row: 4 / 4;
+    }
+
+    .expense__remove-icon {
+        grid-row: 5 / 5;
+    }
 }

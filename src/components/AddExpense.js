@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 
 const AddExpense = (props) => {
-  // handle auto-slash insertion for date input
-  const [dateCount, updateDateCount] = useState(0);
+  // modal state
+  const [modalIsOpen, setIsOpen] = useState(false);
   const [errorText, updateErrorText] = useState('');
 
   // initial state
@@ -12,9 +12,6 @@ const AddExpense = (props) => {
     description: '',
     date: '',
   };
-
-  // modal state
-  const [modalIsOpen, setIsOpen] = useState(false);
 
   // two way binding for modal form - update state with input value
   const [value, setValue] = useState(initialFormInputValueState);
@@ -82,46 +79,39 @@ const AddExpense = (props) => {
     const descriptionInput = e.target.closest('input[name="description"]');
     let dateInputValue;
 
-    if (dateInput) {
-      // only passes when a character is added to input
-      if (e.target.value.length === value.date.length + 1) {
-        // prettier-ignore
-        const isNumber = /[0-9]/gi.test(e.target.value[e.target.value.length - 1]);
-        // check if user input is integer, otherwise exclude value from input
-        if (!isNumber) return;
+    // only passes when a character is added to input
+    if (dateInput && e.target.value.length === value.date.length + 1) {
+      // prettier-ignore
+      const isNumber = /[0-9]/gi.test(e.target.value[e.target.value.length - 1]);
+      // check if user input is integer, otherwise exclude value from input
+      if (!isNumber) return;
 
-        if (value.date.length === 1 || value.date.length === 4) {
-          // check if date input value has hit specific indices and insert slash to format date
-          dateInputValue = dateInput.value + '/';
-        }
+      if (value.date.length === 1 || value.date.length === 4) {
+        // check if date input value has hit specific indices and insert slash to format date
+        dateInputValue = dateInput.value + '/';
       }
     }
 
-    if (expenseInput) {
-      if (e.target.value.length === value.expense.length + 1) {
-        // prettier-ignore
-        const isExpense = /[\.0-9]/gi.test(e.target.value[e.target.value.length - 1]);
-        // check if user input is integer, otherwise exclude value from input
-        if (!isExpense) return;
-      }
+    if (expenseInput && e.target.value.length === value.expense.length + 1) {
+      // prettier-ignore
+      const isExpense = /[\.0-9]/gi.test(e.target.value[e.target.value.length - 1]);
+      // check if user input is integer, otherwise exclude value from input
+      if (!isExpense) return;
     }
 
+    // prettier-ignore
     if (descriptionInput) {
-      if (e.target.value.length === value.expense.length + 1) {
-        // prettier-ignore
-        const isIllegalChar = /[!@\?}#$%^{\]&\[*)(>'<;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
-        // check if user input is integer, otherwise exclude value from input
-        if (isIllegalChar) return;
-      }
+      // prettier-ignore
+      const isIllegalChar = /[!@\?}#$%^{\]&\[*)(><;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
+      // check if user input is integer, otherwise exclude value from input
+      if (isIllegalChar) return;
     }
 
     // update value with useState and pass in dynamic event target name as key with value
     // check if dateInput is present, otherwise pass default e.currentTarget.value
     setValue({
       ...value,
-      [e.currentTarget.name]: !dateInputValue
-        ? e.currentTarget.value
-        : dateInputValue,
+      [e.target.name]: !dateInputValue ? e.target.value : dateInputValue,
     });
   };
 
@@ -172,14 +162,27 @@ const AddExpense = (props) => {
 
   return (
     <>
-      <div className='expense-form__container'>
-        <button onClick={openModal}>Create New Expense</button>
+      <div className='expense__form-container'>
+        <button onClick={openModal}>Create Expense</button>
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           contentLabel='Expense Contact Form'
+          className='expense__modal-container'
         >
-          <button onClick={closeModal}>Exit Expense</button>
+          <div className='expense__create-expense-container'>
+            <div className='expense__create-expense'>Create expense</div>
+            <div onClick={closeModal} className='expense__form-close'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='18'
+                height='18'
+                viewBox='0 0 18 18'
+              >
+                <path d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z'></path>
+              </svg>
+            </div>
+          </div>
           <form id='expenseForm' onSubmit={handleAddExpense}>
             <label>Expense</label>
             <input

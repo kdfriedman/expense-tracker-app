@@ -27,47 +27,60 @@ const ExpenseList = (props) => {
 
   return (
     <>
-      <h1>Expense List</h1>
       {props.expenseList.length > 1 &&
         props.expenseList.slice(1).map((expense, i) => {
           return (
             <div
               id={`expense-container-${expense.id}`}
+              className='expense__container'
               key={`expense-container-${expense.id}`}
             >
-              <div
-                key={`${expense.id}-${expense.expenseItems[0]}`}
-                className='expense__expense-text'
-              >
-                {expense.expenseItems[0]}
-              </div>
-              <div
-                key={`${expense.id}-${expense.expenseItems[1]}`}
-                className='expense__description-text'
-              >
-                {expense.expenseItems[1]}
-              </div>
-              <div
-                key={`${expense.id}-${expense.expenseItems[2]}`}
-                className='expense__date-text'
-              >
-                {expense.expenseItems[2]}
-              </div>
-              <div
-                id={`expense-toggle-${expense.id}`}
-                className='expense__toggle-container'
-                onClick={toggleSelected}
-              >
+              <div className='expense__expense-container'>
+                <div className='expense__label'>Expense:</div>
                 <div
-                  className={`expense__dialog-button ${
-                    expense.isSettled ? '' : 'expense__disabled'
-                  }`}
+                  key={`${expense.id}-${expense.expenseItems[0]}`}
+                  className='expense__expense-text'
                 >
-                  {expense.isSettled ? 'Ok' : 'No'}
+                  {expense.expenseItems[0]}
+                </div>
+              </div>
+              <div className='expense__description-container'>
+                <div className='expense__label'>Description:</div>
+                <div
+                  key={`${expense.id}-${expense.expenseItems[1]}`}
+                  className='expense__description-text'
+                >
+                  {expense.expenseItems[1]}
+                </div>
+              </div>
+              <div className='expense__date-container'>
+                <div className='expense__label'>Date:</div>
+                <div
+                  key={`${expense.id}-${expense.expenseItems[2]}`}
+                  className='expense__date-text'
+                >
+                  {expense.expenseItems[2]}
+                </div>
+              </div>
+              <div className='expense__toggle'>
+                <div className='expense__label'>Settled Status:</div>
+                <div
+                  id={`expense-toggle-${expense.id}`}
+                  className='expense__toggle-container'
+                  onClick={toggleSelected}
+                >
+                  <div
+                    className={`expense__dialog-button ${
+                      expense.isSettled ? '' : 'expense__disabled'
+                    }`}
+                  >
+                    {expense.isSettled ? 'Ok' : 'No'}
+                  </div>
                 </div>
               </div>
               <div
                 id={`expense_remove-icon-${expense.id}`}
+                className='expense__remove-icon'
                 onClick={(e) => handleRemoveExpense(e, `${expense.id}`)}
               >
                 <svg
