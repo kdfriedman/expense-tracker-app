@@ -5,7 +5,6 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
-    publicPath: '/',
   },
   module: {
     rules: [
@@ -25,10 +24,5 @@ module.exports = {
         use: 'babel-loader',
       },
     ],
-  },
-  devtool: 'cheap-module-eval-source-map',
-  devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    historyApiFallback: true,
   },
 };

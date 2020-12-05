@@ -7,6 +7,7 @@
     padding: 2rem;
     box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, .03);
     border: 1px solid #edf2f9;
+    column-gap: 5rem
 }
 
 .expense__form-container {
@@ -176,6 +177,7 @@ form#expenseForm {
 
     .expense__description-container {
         grid-row: 2 / 2;
+        grid-column: 1 / 5;
     }
 
     .expense__date-container {
@@ -184,6 +186,7 @@ form#expenseForm {
 
     .expense__toggle {
         grid-row: 4 / 4;
+        grid-column: 1 / 5;
     }
 
     .expense__remove-icon {

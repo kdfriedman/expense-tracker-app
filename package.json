@@ -4,8 +4,8 @@
   "description": "Expense app for couples who split the bill",
   "main": "app.js",
   "scripts": {
-    "build": "webpack",
-    "start": "webpack serve --mode development --env development"
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --config webpack.dev.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,9 +25,9 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
+    "@webpack-cli/serve": "^1.1.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.2.1",
-    "mini-css-extract-plugin": "^1.2.1",
     "node-sass": "^4.14.1",
     "normalize.css": "^8.0.1",
     "sass-loader": "^9.0.3",
@@ -35,6 +35,7 @@
     "validator": "^13.1.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.4.0"
   }
 }
