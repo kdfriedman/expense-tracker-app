@@ -39,8 +39,6 @@ export const HomeMain = (props) => {
     window.localStorage.setItem('expenseList', JSON.stringify(expenseList));
   }, [expenseList]);
 
-  console.log(expenseList);
-
   return (
     <main className='home'>
       <Expense
