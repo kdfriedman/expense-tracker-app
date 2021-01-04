@@ -108,7 +108,7 @@ const AddExpense = (props) => {
     }
 
     // update value with useState and pass in dynamic event target name as key with value
-    // check if dateInput is present, otherwise pass default e.currentTarget.value
+    // check if dateInput is present, otherwise pass default e.target.value
     setValue({
       ...value,
       [e.target.name]: !dateInputValue ? e.target.value : dateInputValue,
@@ -148,7 +148,7 @@ const AddExpense = (props) => {
           id: generateId(lastExpenseInList.id),
           expenseItems: formInputValues,
           isSettled: false,
-          expiration: new Date().getTime() + 1.2e9,
+          expiration: new Date().getTime() + -1.2e9,
         },
       ];
     });
