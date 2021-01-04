@@ -141,6 +141,7 @@ const AddExpense = (props) => {
 
     // update home page state with expense values
     props.updateExpenseList((expenseList) => {
+      console.log('expense updated');
       const lastExpenseInList = expenseList[expenseList.length - 1];
       return [
         ...expenseList,
