@@ -141,7 +141,6 @@ const AddExpense = (props) => {
 
     // update home page state with expense values
     props.updateExpenseList((expenseList) => {
-      console.log('expense updated');
       const lastExpenseInList = expenseList[expenseList.length - 1];
       return [
         ...expenseList,
@@ -149,7 +148,7 @@ const AddExpense = (props) => {
           id: generateId(lastExpenseInList.id),
           expenseItems: formInputValues,
           isSettled: false,
-          expiration: new Date().getTime() + -1.2e9,
+          expiration: new Date().getTime() + 1.2e9,
         },
       ];
     });
