@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { HomeMain as Main } from '../../HomeMain';
 
 const HomePage = (props) => {
@@ -10,3 +11,7 @@ const HomePage = (props) => {
 };
 
 export default HomePage;
+
+HomePage.propTypes = {
+  location: PropTypes.object.isRequired,
+};

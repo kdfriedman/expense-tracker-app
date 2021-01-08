@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const ExpenseList = (props) => {
   // toggle state using falsy bool as arg for useState handler
@@ -28,7 +29,7 @@ const ExpenseList = (props) => {
   return (
     <>
       {props.expenseList.length > 1 &&
-        props.expenseList.slice(1).map((expense, i) => {
+        props.expenseList.slice(1).map((expense) => {
           return (
             <div
               id={`expense-container-${expense.id}`}
@@ -68,6 +69,14 @@ const ExpenseList = (props) => {
                   id={`expense-toggle-${expense.id}`}
                   className='expense__toggle-container'
                   onClick={toggleSelected}
+                  data-analytics-payload={`{
+                    "event": "on_click", 
+                    "element_data_value": "expense toggle - ${props.expenseList[expense.id].isSettled}", 
+                    "element_type":"div", 
+                    "element_class": "expense__toggle-container", 
+                    "element_id": "expense-toggle-${expense.id}",
+                    "component_name": "Expense"
+                  }`}
                 >
                   <div
                     className={`expense__dialog-button ${
@@ -82,6 +91,14 @@ const ExpenseList = (props) => {
                 id={`expense_remove-icon-${expense.id}`}
                 className='expense__remove-icon'
                 onClick={(e) => handleRemoveExpense(e, `${expense.id}`)}
+                data-analytics-payload={`{
+                  "event": "on_click", 
+                  "element_data_value": "remove expense - x button click", 
+                  "element_type":"div", 
+                  "element_class": "expense__remove-icon", 
+                  "element_id": "expense_remove-icon-${expense.id}",
+                  "component_name": "Expense"
+                }`}
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -100,3 +117,8 @@ const ExpenseList = (props) => {
 };
 
 export default ExpenseList;
+
+ExpenseList.propTypes = {
+  updateExpenseList: PropTypes.func.isRequired,
+  expenseList: PropTypes.array.isRequired
+};

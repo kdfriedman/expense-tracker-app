@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
+import React, { useState } from "react";
+import Modal from "react-modal";
+import PropTypes from "prop-types";
 
 const AddExpense = (props) => {
   // modal state
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [errorText, updateErrorText] = useState('');
+  const [errorText, updateErrorText] = useState("");
 
   // initial state
   const initialFormInputValueState = {
-    expense: '',
-    description: '',
-    date: '',
+    expense: "",
+    description: "",
+    date: "",
   };
 
   // two way binding for modal form - update state with input value
@@ -24,12 +25,12 @@ const AddExpense = (props) => {
   const INPUT_KEY_REGEX_MAP = {
     expense: new RegExp(
       `(^[0-9]$)|(^[0-9]{3}.[0-9]{2}$)|(^[0-9]{3}.[0-9]{1}$)|(^[0-9]{2}.[0-9]{2}$)|(^[0-9]{2}.[0-9]$)|(^[0-9]{3})|(^[0-9]{2})$`,
-      'g'
+      "g"
     ),
-    description: new RegExp(/([^!@#$%^&*)(][0-9a-zA-Z\s]+)/, 'ig'),
+    description: new RegExp(/([^!@#$%^&*)(][0-9a-zA-Z\s]+)/, "ig"),
     date: new RegExp(
       `^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)[0-9][0-9]$`,
-      'ig'
+      "ig"
     ),
   };
 
@@ -38,7 +39,7 @@ const AddExpense = (props) => {
     // update form with initial values
     setValue(initialFormInputValueState);
     // clear all error text
-    updateErrorText('');
+    updateErrorText("");
   };
 
   // open modal
@@ -51,13 +52,13 @@ const AddExpense = (props) => {
     // update form with initial values
     setValue(initialFormInputValueState);
     // clear all error text
-    updateErrorText('');
+    updateErrorText("");
     setIsOpen(false);
   };
 
   // handle invalid user input using regex
-  const handleInvalidInput = (e) => {
-    const form = document.getElementById('expenseForm');
+  const handleInvalidInput = () => {
+    const form = document.getElementById("expenseForm");
     // prettier-ignore
     const formInputs = [...form.elements].filter((el) => el.tagName.toLowerCase() === 'input');
     const validatedInputs = formInputs.filter((input) => {
@@ -68,7 +69,7 @@ const AddExpense = (props) => {
   };
 
   const handleInvalidDate = () => {
-    return updateErrorText('Please enter valid date');
+    return updateErrorText("Please enter valid date");
   };
 
   // handle two way binding on DOM
@@ -88,13 +89,13 @@ const AddExpense = (props) => {
 
       if (value.date.length === 1 || value.date.length === 4) {
         // check if date input value has hit specific indices and insert slash to format date
-        dateInputValue = dateInput.value + '/';
+        dateInputValue = dateInput.value + "/";
       }
     }
 
     if (expenseInput && e.target.value.length === value.expense.length + 1) {
       // prettier-ignore
-      const isExpense = /[\.0-9]/gi.test(e.target.value[e.target.value.length - 1]);
+      const isExpense = /[.0-9]/gi.test(e.target.value[e.target.value.length - 1]);
       // check if user input is integer, otherwise exclude value from input
       if (!isExpense) return;
     }
@@ -102,7 +103,7 @@ const AddExpense = (props) => {
     // prettier-ignore
     if (descriptionInput) {
       // prettier-ignore
-      const isIllegalChar = /[!@\?}#$%^{\]&\[*)(><;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
+      const isIllegalChar = /[!@?}#$%^{\]&[*)(><;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
       // check if user input is integer, otherwise exclude value from input
       if (isIllegalChar) return;
     }
@@ -131,7 +132,7 @@ const AddExpense = (props) => {
 
     // filter out form elements for input elements only
     const formElementValueList = formElements.filter((formElement) =>
-      formElement.tagName.toLowerCase().includes('input')
+      formElement.tagName.toLowerCase().includes("input")
     );
 
     // map the values from each input element in form
@@ -162,65 +163,88 @@ const AddExpense = (props) => {
 
   return (
     <>
-      <div className='expense__form-container'>
-        <button onClick={openModal}>Create Expense</button>
+      <div className="expense__form-container">
+        <button
+          data-analytics-payload='{
+            "event": "on_click", 
+            "element_data_value": "create expense click", 
+            "element_type":"button", 
+            "element_class": "undefined", 
+            "element_id": "undefined",
+            "component_name": "AddExpense"
+          }'
+          onClick={openModal}
+        >
+          Create Expense
+        </button>
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
-          contentLabel='Expense Contact Form'
-          className='expense__modal-container'
+          contentLabel="Expense Contact Form"
+          className="expense__modal-container"
         >
-          <div className='expense__create-expense-container'>
-            <div className='expense__create-expense'>Create expense</div>
-            <div onClick={closeModal} className='expense__form-close'>
+          <div className="expense__create-expense-container">
+            <div className="expense__create-expense">Create expense</div>
+            <div
+              onClick={closeModal}
+              className="expense__form-close"
+              data-analytics-payload='{
+                "event": "on_click", 
+                "element_data_value": "create expense form close - x button click",
+                "element_type":"div", 
+                "element_class": "expense__form-close", 
+                "element_id": "undefined",
+                "component_name": "AddExpense"
+              }'
+            >
               <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='18'
-                height='18'
-                viewBox='0 0 18 18'
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
               >
-                <path d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z'></path>
+                <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
               </svg>
             </div>
           </div>
-          <form id='expenseForm' onSubmit={handleAddExpense}>
+          <form id="expenseForm" onSubmit={handleAddExpense}>
             <label>Expense</label>
             <input
               onChange={bindInputValueToForm}
-              type='text'
-              placeholder='e.g. 24.34'
-              name='expense'
+              type="text"
+              placeholder="e.g. 24.34"
+              name="expense"
               value={value.expense}
-              minLength='1'
-              maxLength='6'
+              minLength="1"
+              maxLength="6"
               required
             />
             <label>Description</label>
             <input
               onChange={bindInputValueToForm}
-              type='text'
-              placeholder='e.g. groceries'
-              name='description'
+              type="text"
+              placeholder="e.g. groceries"
+              name="description"
               value={value.description}
-              minLength='1'
-              maxLength='50'
+              minLength="1"
+              maxLength="50"
               required
             />
             <label>Date</label>
             <input
               onChange={bindInputValueToForm}
-              type='text'
-              placeholder='mm/dd/yyyy'
-              name='date'
+              type="text"
+              placeholder="mm/dd/yyyy"
+              name="date"
               value={value.date}
               required
-              minLength='10'
-              maxLength='10'
+              minLength="10"
+              maxLength="10"
             />
-            <span id='dateInputError' className='input__error-text'>
+            <span id="dateInputError" className="input__error-text">
               {errorText}
             </span>
-            <button type='submit'>Add Expense</button>
+            <button type="submit">Add Expense</button>
           </form>
         </Modal>
       </div>
@@ -229,3 +253,7 @@ const AddExpense = (props) => {
 };
 
 export default AddExpense;
+
+AddExpense.propTypes = {
+  updateExpenseList: PropTypes.func.isRequired,
+};

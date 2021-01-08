@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AddExpense from './AddExpense';
 import Expense from './Expense';
 
-export const HomeMain = (props) => {
+export const HomeMain = () => {
   // check if localStorage has expenseList, otherwise initialize state with empty object
   const initExpenseList = () => {
     let activeExpenseListData;
