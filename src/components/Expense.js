@@ -2,17 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ExpenseList = (props) => {
+
   // toggle state using falsy bool as arg for useState handler
   const toggleSelected = (e) => {
-    //e.persist();
-    const currentTargetId = e.currentTarget.id.slice(
-      e.currentTarget.id.length - 1
-    );
+    const targetElement = e.target.closest('.expense__toggle-container') || null;
+    const targetId = targetElement.id ? parseInt(targetElement.id.slice(targetElement.id.length - 1)) : null;
+
+    if (!targetElement || !targetId) return console.error('expense toggle container element is either null or event target element does not have an ID');
+
     props.updateExpenseList((expenseList) => {
       let copiedExpenseList = [...expenseList];
-      copiedExpenseList[currentTargetId].isSettled = !copiedExpenseList[
-        currentTargetId
-      ].isSettled;
+
+      const targetIndex = copiedExpenseList.findIndex(prop => prop.id === targetId);
+      copiedExpenseList[targetIndex].isSettled = !copiedExpenseList[targetIndex].isSettled;
       return copiedExpenseList;
     });
   };
@@ -71,10 +73,10 @@ const ExpenseList = (props) => {
                   onClick={toggleSelected}
                   data-analytics-payload={`{
                     "event": "on_click", 
-                    "element_data_value": "expense toggle - ${props.expenseList[expense.id].isSettled}", 
+                    "element_data_value": "expense toggle - test", 
                     "element_type":"div", 
                     "element_class": "expense__toggle-container", 
-                    "element_id": "expense-toggle-${expense.id}",
+                    "element_id": "expense-toggle-test",
                     "component_name": "Expense"
                   }`}
                 >
