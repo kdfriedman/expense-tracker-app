@@ -73,7 +73,7 @@ const ExpenseList = (props) => {
                   onClick={toggleSelected}
                   data-analytics-payload={`{
                     "event": "on_click", 
-                    "element_data_value": "expense toggle - ${props.expenseList[expense.id].isSettled}", 
+                    "element_data_value": "expense toggle - ${expense.isSettled}", 
                     "element_type":"div", 
                     "element_class": "expense__toggle-container", 
                     "element_id": "expense-toggle-${expense.id}",
