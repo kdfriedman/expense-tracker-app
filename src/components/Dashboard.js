@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AddExpense from './AddExpense';
 import Expense from './Expense';
 
-export const HomeMain = () => {
+export const Dashboard = () => {
   // check if localStorage has expenseList, otherwise initialize state with empty object
   const initExpenseList = () => {
     let activeExpenseListData;
@@ -40,7 +40,7 @@ export const HomeMain = () => {
   }, [expenseList]);
 
   return (
-    <main className='home'>
+    <main className='dashboard'>
       <Expense
         expenseList={expenseList}
         updateExpenseList={updateExpenseList}
