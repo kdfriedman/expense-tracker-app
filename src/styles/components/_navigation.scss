@@ -1,9 +1,8 @@
 .nav {
-  margin: 1.5rem;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
-.nav__container {
+.nav__lg-links {
   list-style-type: none;
   display: flex;
   flex-flow: row nowrap;
@@ -21,7 +20,7 @@
 }
 
 @media (max-width: 600px) {
-  .nav__container {
+  .nav__lg-container {
     display: none;
   }
 
@@ -32,8 +31,17 @@
     position: relative;
   }
 
-  .nav__sm-drawer {
+  .nav__sm-links {
     display: none;
+  }
+
+  .nav__sm-links.active {
+    list-style-type: none;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    padding: 0;
+    margin: 0;
   }
 
   .nav-sm-menu-icon {
