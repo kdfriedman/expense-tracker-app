@@ -1,5 +1,7 @@
 .nav {
-  padding: 1rem;
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
 }
 
 .nav__lg-links {
@@ -9,17 +11,108 @@
   justify-content: space-evenly;
   padding: 0;
   margin: 0;
+  flex: 1 0 auto;
+}
+
+.nav__lg-container {
+  display: flex;
+  flex: 1 0 auto;
+  margin: 0 5rem;
 }
 
 .nav__sm-container {
   display: none;
 }
 
-.nav__link {
+#navLoginLink {
+  display: flex;
+  flex-flow: column nowrap;
+  align-self: flex-end;
+  justify-self: flex-end;
+  align-items: flex-end;
+}
+
+#navLoginLink:hover {
+  opacity: 1;
+  cursor: default;
+}
+
+#aboutLink {
+  margin: 0 2rem;
+}
+
+#dashboardLink {
+  margin: 0 2rem;
+}
+
+#expenseFeedLink {
+  margin: 0 2rem;
+}
+
+#homeLink {
+  padding: 0;
+}
+
+#homeLink:hover {
+  opacity: 1;
+  cursor: default;
+}
+
+#homeLogo {
+  width: 4.5rem;
+  max-width: 100%;
+  height: auto;
+}
+
+#homeLogo:hover {
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
+.nav__link {
+  cursor: pointer;
+  padding: 1rem;
+  align-self: center;
+}
+
+.nav__link a {
+  text-decoration: none;
+  color: #12263f;
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+.nav__link:hover {
+  opacity: 0.6;
+}
+
+#login {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.nav__login-link-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.nav__login-link-container:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.nav__link-inner-text {
+  margin: 0 0.25rem;
+}
+
+.nav__link-icon {
+  margin: 0 0.25rem;
+  width: 2rem;
+  height: auto;
+}
+
+@media (max-width: 800px) {
   .nav__lg-container {
     display: none;
   }
@@ -29,6 +122,7 @@
     grid-template-columns: 100%;
     grid-template-rows: 100%;
     position: relative;
+    margin: 0 2rem;
   }
 
   .nav__sm-links {

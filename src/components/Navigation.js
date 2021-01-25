@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { HiOutlineMenu } from "react-icons/hi";
 import { GrClose } from "react-icons/gr";
 import { VscAccount } from "react-icons/vsc";
@@ -32,11 +33,27 @@ const Navigation = () => {
       <div className="nav">
         <div className="nav__lg-container">
           <ul className="nav__lg-links">
-            <li className="nav__link">Home</li>
-            <li className="nav__link">Dashboard</li>
+            <li id="homeLink" className="nav__link">
+              <NavLink to="/">
+                <img id="homeLogo" src="/assets/favicon.svg" />
+              </NavLink>
+            </li>
+            <li id="aboutLink" className="nav__link">
+              <NavLink to="/about">About</NavLink>
+            </li>
+            <li id="expenseFeedLink" className="nav__link">
+              <NavLink to="/expense-feed">Expense Feed</NavLink>
+            </li>
+            <li id="dashboardLink" className="nav__link">
+              <NavLink to="/dashboard">Dashboard</NavLink>
+            </li>
             <li id="navLoginLink" className="nav__link">
-              <span className="nav__link-inner-text">Login</span>
-              <VscAccount className="nav__link-icon" />
+              <div className="nav__login-link-container">
+                <NavLink id="login" to="/login">
+                  <VscAccount className="nav__link-icon" />
+                  <span className="nav__link-inner-text">Login</span>
+                </NavLink>
+              </div>
             </li>
           </ul>
         </div>
@@ -52,7 +69,7 @@ const Navigation = () => {
             className="nav-sm-exit-icon"
           />
           <ul className="nav__sm-links">
-            <li className="nav__sm-link">Home</li>
+            <li className="nav__sm-link">Logo</li>
             <li className="nav__sm-link">Dashboard</li>
             <li className="nav__sm-link">Login</li>
           </ul>
