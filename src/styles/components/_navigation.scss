@@ -103,6 +103,24 @@
   height: auto;
 }
 
+.nav__sm-drawer {
+  background: #fff;
+  height: 100%;
+  left: 0;
+  max-width: 320px;
+  position: fixed;
+  transition: transform 0.15s ease-out, opacity 0.25s;
+  width: calc(100% - 55px);
+  top: 0;
+  transform: translateX(-100%);
+  z-index: 3;
+}
+
+.nav__sm-drawer-backdrop {
+  display: none;
+  opacity: 0;
+}
+
 @media (max-width: 950px) {
   .nav__lg-container {
     display: none;
@@ -111,6 +129,38 @@
   .nav__sm-container {
     display: flex;
     margin: 0 2rem;
+    cursor: pointer;
+  }
+
+  .nav__sm-drawer.active {
+    background: #fff;
+    height: 100%;
+    left: 0;
+    max-width: 320px;
+    position: fixed;
+    transition: transform 0.15s ease-out, opacity 0.25s;
+    width: calc(100% - 55px);
+    top: 0;
+    transform: translateX(0%);
+    z-index: 3;
+  }
+
+  .nav__sm-drawer-backdrop.active {
+    opacity: 1 !important;
+    pointer-events: all !important;
+    background: rgba(0, 0, 0, 0.4);
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    -webkit-transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    z-index: 2;
   }
 
   .nav__sm-links {
@@ -126,20 +176,33 @@
     margin: 0;
   }
 
-  .nav-sm-menu-icon {
-    width: 2.5rem;
-    height: auto;
-    opacity: 0;
-    transition: all 0.3s ease;
-    grid-column: 1;
-    grid-row: 1;
-    position: relative;
+  .nav__sm-link {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem 1rem;
   }
 
-  .nav-sm-menu-icon.active {
+  .nav__sm-link a {
+    text-decoration: none;
+    color: #12263f;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: block;
+  }
+
+  .nav__sm-menu-icon {
+    opacity: 0;
+    display: none;
+  }
+
+  .nav__sm-menu-icon.active {
     transition: all 0.3s ease;
+    width: 2.5rem;
+    height: auto;
     opacity: 1;
     position: relative;
+    display: flex;
   }
 
   .nav-sm-menu-icon:hover {

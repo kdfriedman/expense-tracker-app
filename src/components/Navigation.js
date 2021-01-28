@@ -4,24 +4,17 @@ import { HiOutlineMenu } from "react-icons/hi";
 
 const Navigation = () => {
   const handleMenuAction = (e) => {
-    const menuTargetContainerEl =
-      e.target.closest(".nav__sm-container") ?? null;
-    const menuIconElement =
-      menuTargetContainerEl.querySelector(".nav-sm-menu-icon") ?? null;
-    const menuSmDrawerEl =
-      menuTargetContainerEl.querySelector(".nav__sm-links") ?? null;
-
-    if (
-      !menuTargetContainerEl ||
-      !menuIconElement ||
-      !menuSmDrawerEl ||
-      menuIconElement.length === 0
-    ) {
-      return;
-    }
-
-    menuIconElement.classList.toggle("active");
-    menuSmDrawerEl.classList.toggle("active");
+    const nav = e.target.closest(".nav") ?? null;
+    const navChildMenuElList = nav.querySelectorAll(
+      `
+        .nav__sm-menu-icon, 
+        .nav__sm-drawer, 
+        .nav__sm-links, 
+        .nav__sm-drawer-backdrop
+      `
+    );
+    if (!navChildMenuElList || navChildMenuElList.length < 4) return;
+    navChildMenuElList.forEach((child) => child.classList.toggle("active"));
   };
 
   return (
@@ -35,16 +28,13 @@ const Navigation = () => {
               </NavLink>
             </li>
             <li className="nav__link margin-lf-rt">
-              <NavLink to="/expense-history">Expense History</NavLink>
-            </li>
-            <li className="nav__link margin-lf-rt">
-              <NavLink to="/dashboard">Dashboard</NavLink>
-            </li>
-            <li className="nav__link margin-lf-rt">
               <NavLink to="/about">About</NavLink>
             </li>
             <li className="nav__link margin-lf-rt">
               <NavLink to="/expense-feed">Expense Feed</NavLink>
+            </li>
+            <li className="nav__link margin-lf-rt">
+              <NavLink to="/dashboard">Dashboard</NavLink>
             </li>
             <li id="navLoginLink" className="nav__link">
               <div className="nav__link-btn-container">
@@ -57,10 +47,12 @@ const Navigation = () => {
         </div>
         <div onClick={handleMenuAction} className="nav__sm-container">
           <HiOutlineMenu
-            className="nav-sm-menu-icon active"
+            className="nav__sm-menu-icon active"
             fill="#12263f"
             stroke="#12263f"
           />
+        </div>
+        <div className="nav__sm-drawer">
           <ul className="nav__sm-links">
             <li className="nav__sm-link">
               <NavLink to="/">
@@ -68,16 +60,13 @@ const Navigation = () => {
               </NavLink>
             </li>
             <li className="nav__sm-link">
-              <NavLink to="/expense-history">Expense History</NavLink>
-            </li>
-            <li className="nav__sm-link">
-              <NavLink to="/dashboard">Dashboard</NavLink>
-            </li>
-            <li className="nav__sm-link">
               <NavLink to="/about">About</NavLink>
             </li>
             <li className="nav__sm-link">
               <NavLink to="/expense-feed">Expense Feed</NavLink>
+            </li>
+            <li className="nav__sm-link">
+              <NavLink to="/dashboard">Dashboard</NavLink>
             </li>
             <li className="nav__sm-link">
               <div className="nav__sm-link-btn-container">
@@ -88,6 +77,10 @@ const Navigation = () => {
             </li>
           </ul>
         </div>
+        <div
+          onClick={handleMenuAction}
+          className="nav__sm-drawer-backdrop"
+        ></div>
       </div>
     </>
   );
