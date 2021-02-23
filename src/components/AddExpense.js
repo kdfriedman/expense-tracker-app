@@ -7,9 +7,19 @@ const AddExpense = (props) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [errorText, updateErrorText] = useState("");
 
+  const EXPENSE_BUTTON_TYPE = {
+    negative: "I owe",
+    positive: "Owes me",
+  };
+
+  const [expenseBtnType, updateExpenseBtnType] = useState(
+    EXPENSE_BUTTON_TYPE.positive
+  );
+
   // initial state
   const initialFormInputValueState = {
     expense: "",
+    expenseType: [],
     description: "",
     date: "",
   };
@@ -27,6 +37,7 @@ const AddExpense = (props) => {
       `(^[0-9]$)|(^[0-9]{3}.[0-9]{2}$)|(^[0-9]{3}.[0-9]{1}$)|(^[0-9]{2}.[0-9]{2}$)|(^[0-9]{2}.[0-9]$)|(^[0-9]{3})|(^[0-9]{2})$`,
       "g"
     ),
+    expenseType: new RegExp(/[a-zA-Z\s-.:]+/, "ig"),
     description: new RegExp(/([^!@#$%^&*)(][0-9a-zA-Z\s]+)/, "ig"),
     date: new RegExp(
       `^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)[0-9][0-9]$`,
@@ -56,6 +67,31 @@ const AddExpense = (props) => {
     setIsOpen(false);
   };
 
+  // handle toggle between expenseType button
+  const handleExpenseTypeChange = (e) => {
+    const expenseTypeParentEl = e.currentTarget;
+    const targetExpenseTypeBtn = e.target.closest("[data-btn-active]");
+    const isTargetBtnActive = targetExpenseTypeBtn.dataset.btnActive;
+
+    // check if target btn element contains data-btn-active='false'
+    if (isTargetBtnActive === "false") {
+      // set btn that was false to true and active class
+      targetExpenseTypeBtn.dataset.btnActive = "true";
+      targetExpenseTypeBtn.classList.toggle("active");
+      // update expenseType click button click value to use for input expenseType related input binding
+      updateExpenseBtnType(targetExpenseTypeBtn.dataset.expenseType);
+      // loop through list of btn elements and filter out targetBtn which was changed
+      // change non-active btn which was previously true
+      const expenseTypeBtnList = [...expenseTypeParentEl.children];
+      expenseTypeBtnList.forEach((expenseTypeBtn) => {
+        if (expenseTypeBtn !== targetExpenseTypeBtn) {
+          expenseTypeBtn.classList.toggle("active");
+          expenseTypeBtn.dataset.btnActive = "false";
+        }
+      });
+    }
+  };
+
   // handle invalid user input using regex
   const handleInvalidInput = () => {
     const form = document.getElementById("expenseForm");
@@ -77,6 +113,7 @@ const AddExpense = (props) => {
   const bindInputValueToForm = (e) => {
     const dateInput = e.target.closest('input[name="date"]');
     const expenseInput = e.target.closest('input[name="expense"]');
+    const expenseTypeInput = e.target.closest('input[name="expenseType"]');
     const descriptionInput = e.target.closest('input[name="description"]');
     let dateInputValue;
 
@@ -104,8 +141,16 @@ const AddExpense = (props) => {
     if (descriptionInput) {
       // prettier-ignore
       const isIllegalChar = /[!@?}#$%^{\]&[*)(><;"+=~`_-]/gi.test(e.target.value[e.target.value.length - 1]);
-      // check if user input is integer, otherwise exclude value from input
+      // check if user input is allowed, otherwise exclude value from input
       if (isIllegalChar) return;
+    }
+
+    // prettier-ignore
+    if (expenseTypeInput) {
+      // prettier-ignore
+      const isValidChar = /[a-zA-Z\s-.:]+/.test(e.target.value[e.target.value.length - 1]);
+      // check if user input is integer, otherwise exclude value from input
+      if (!isValidChar) return;
     }
 
     // update value with useState and pass in dynamic event target name as key with value
@@ -122,7 +167,7 @@ const AddExpense = (props) => {
 
     // additional validation onSubmit to ensure correct inputs
     const validatedInputs = handleInvalidInput(e);
-    if (validatedInputs.length < 3) {
+    if (validatedInputs.length < 4) {
       handleInvalidDate();
       return;
     }
@@ -139,6 +184,8 @@ const AddExpense = (props) => {
     const formInputValues = formElementValueList.map((input) =>
       input.value.trim()
     );
+    // descructure form input data so I can inject expenseType btn value
+    const [expense, expenseType, description, date] = formInputValues;
 
     // update home page state with expense values
     props.updateExpenseList((expenseList) => {
@@ -147,7 +194,12 @@ const AddExpense = (props) => {
         ...expenseList,
         {
           id: generateId(lastExpenseInList.id),
-          expenseItems: formInputValues,
+          expenseItems: [
+            expense,
+            [expenseBtnType, expenseType],
+            description,
+            date,
+          ],
           isSettled: false,
           expiration: new Date().getTime() + 1.2e9,
         },
@@ -217,6 +269,35 @@ const AddExpense = (props) => {
               value={value.expense}
               minLength="1"
               maxLength="6"
+              required
+            />
+            <label
+              onClick={handleExpenseTypeChange}
+              className="expense__settlement-type-container"
+            >
+              <div
+                data-expense-type={EXPENSE_BUTTON_TYPE.positive}
+                data-btn-active="true"
+                className="expense__settlement-type-button active"
+              >
+                {EXPENSE_BUTTON_TYPE.positive}
+              </div>
+              <div
+                data-expense-type={EXPENSE_BUTTON_TYPE.negative}
+                data-btn-active="false"
+                className="expense__settlement-type-button"
+              >
+                {EXPENSE_BUTTON_TYPE.negative}
+              </div>
+            </label>
+            <input
+              onChange={bindInputValueToForm}
+              type="text"
+              placeholder="e.g. Melissa"
+              name="expenseType"
+              value={value.expenseType}
+              minLength="1"
+              maxLength="30"
               required
             />
             <label>Description</label>
