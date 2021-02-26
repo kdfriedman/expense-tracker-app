@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import PropTypes from "prop-types";
+import capitalizeAllStrings from "../utility/util";
 
 const AddExpense = (props) => {
   // modal state
@@ -34,7 +35,7 @@ const AddExpense = (props) => {
   // regex map to use for form input validation
   const INPUT_KEY_REGEX_MAP = {
     expense: new RegExp(
-      `(^[0-9]$)|(^[0-9]{3}.[0-9]{2}$)|(^[0-9]{3}.[0-9]{1}$)|(^[0-9]{2}.[0-9]{2}$)|(^[0-9]{2}.[0-9]$)|(^[0-9]{3})|(^[0-9]{2})$`,
+      `(^[0-9]$)|(^[0-9]{1}.[0-9]{3}$)|(^[0-9]{1}.[0-9]{4}$)|(^[0-9]{1}.[0-9]{2}$)|(^[0-9]{3}.[0-9]{2}$)|(^[0-9]{3}.[0-9]{1}$)|(^[0-9]{2}.[0-9]{2}$)|(^[0-9]{2}.[0-9]$)|(^[0-9]{3})|(^[0-9]{2})$`,
       "g"
     ),
     expenseType: new RegExp(/[a-zA-Z\s-.:]+/, "ig"),
@@ -71,6 +72,8 @@ const AddExpense = (props) => {
   const handleExpenseTypeChange = (e) => {
     const expenseTypeParentEl = e.currentTarget;
     const targetExpenseTypeBtn = e.target.closest("[data-btn-active]");
+    // check if event click is closest to data-btn-active attribute, if not, return
+    if (!targetExpenseTypeBtn) return;
     const isTargetBtnActive = targetExpenseTypeBtn.dataset.btnActive;
 
     // check if target btn element contains data-btn-active='false'
@@ -186,7 +189,8 @@ const AddExpense = (props) => {
     );
     // descructure form input data so I can inject expenseType btn value
     const [expense, expenseType, description, date] = formInputValues;
-
+    // util func to ensure that expenseType a.k.a name string is capitalized
+    const formattedExpenseType = capitalizeAllStrings(expenseType);
     // update home page state with expense values
     props.updateExpenseList((expenseList) => {
       const lastExpenseInList = expenseList[expenseList.length - 1];
@@ -196,7 +200,7 @@ const AddExpense = (props) => {
           id: generateId(lastExpenseInList.id),
           expenseItems: [
             expense,
-            [expenseBtnType, expenseType],
+            [expenseBtnType, formattedExpenseType],
             description,
             date,
           ],
@@ -270,6 +274,7 @@ const AddExpense = (props) => {
               minLength="1"
               maxLength="6"
               required
+              pattern="[^-][.0-9]+"
             />
             <label
               onClick={handleExpenseTypeChange}

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "caniuse-lite": "^1.0.30001192",
     "plotly.js": "^1.58.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

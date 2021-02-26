@@ -1,8 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { HiOutlineMenu } from "react-icons/hi";
 
-const Navigation = () => {
+const Navigation = ({ pathname }) => {
+  console.log(pathname);
   const handleMenuAction = (e) => {
     const nav = e.target.closest(".nav") ?? null;
     const navChildMenuElList = nav.querySelectorAll(
@@ -84,6 +86,10 @@ const Navigation = () => {
       </div>
     </>
   );
+};
+
+Navigation.propTypes = {
+  pathname: PropTypes.string.isRequired,
 };
 
 export default Navigation;
