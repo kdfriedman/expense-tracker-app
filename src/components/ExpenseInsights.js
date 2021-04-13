@@ -3,6 +3,30 @@ import PropTypes from "prop-types";
 import Plot from "react-plotly.js";
 
 const ExpenseInsights = (props) => {
+  // get state of settled expenses and return as array
+  const getExpenseIsSettledKeyList = (expenseList) => {
+    const expenseIsSettledKeyMap = new Map();
+    expenseIsSettledKeyMap.set("true", "settled");
+    expenseIsSettledKeyMap.set("false", "unsettled");
+
+    console.log(expenseIsSettledKeyMap);
+
+    // copy expense list to use within charts, avoiding altering the state itself
+    const copiedExpenseList = [...expenseList];
+    const copiedValidExpenserList = copiedExpenseList.filter(
+      (expense) => expense?.expenseItems.length !== 0
+    );
+    // use within charts to determine if expense item is settled or not
+    const copiedExpenseIsSettledKeyList = copiedValidExpenserList.map(
+      (expense) => {
+        return expenseIsSettledKeyMap.get(expense.isSettled.toString());
+      }
+    );
+    return copiedExpenseIsSettledKeyList;
+  };
+
+  const expenseIsSettledKeyList = getExpenseIsSettledKeyList(props.expenseList);
+
   const sumExpensesBySettledState = (expenseList) => {
     // return func if expense list does not exist
     if (!expenseList) return;
@@ -52,6 +76,7 @@ const ExpenseInsights = (props) => {
   const summedExpensesBySettledState = sumExpensesBySettledState(
     props.expenseList
   );
+  console.log(summedExpensesBySettledState);
 
   const groupExpenseCountByUser = (expenseList) => {
     // exclude all entries which contain empty expenseItem arr
@@ -162,7 +187,7 @@ const ExpenseInsights = (props) => {
                 data={[
                   {
                     values: summedExpensesBySettledState,
-                    labels: ["settled", "unsettled"],
+                    labels: expenseIsSettledKeyList,
                     type: "pie",
                   },
                 ]}
